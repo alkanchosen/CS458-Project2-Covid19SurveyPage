@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import type {Node} from 'react';
 import {
@@ -8,7 +9,6 @@ import {
   View,
 } from 'react-native';
 
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {
   Button,
   Divider,
@@ -35,17 +35,20 @@ const App: () => Node = () => {
         <View>
           <Headline style={{marginLeft: 5}}>COVID-19 Survey Page</Headline>
           <TextInput
+            accessibilityLabel="name"
             label="Name"
             value={name}
             onChangeText={text => setName(text)}
           />
           <TextInput
+            accessibilityLabel="surname"
             label="Surname"
             value={surname}
             onChangeText={text => setSurname(text)}
             style={{marginTop: 10}}
           />
           <TextInput
+            accessibilityLabel="city"
             label="City"
             value={city}
             onChangeText={text => setCity(text)}
@@ -78,12 +81,14 @@ const App: () => Node = () => {
             />
           </RadioButton.Group>
           <TextInput
+            accessibilityLabel="sideEffects"
             style={{marginTop: 10}}
             label="Side Effects"
             value={sideEffects}
             onChangeText={text => setSideEffects(text)}
           />
           <TextInput
+            accessibilityLabel="symptoms"
             style={{marginTop: 10}}
             label="Any PCR positive cases and Covid-19 symptoms after 3rd vaccination"
             value={symptoms}
