@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
 import type {Node} from 'react';
+import React from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -8,6 +8,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
 
 import {
   Button,
@@ -22,11 +23,29 @@ const App: () => Node = () => {
   const isDarkMode = useColorScheme() === 'dark';
   const [name, setName] = React.useState('');
   const [surname, setSurname] = React.useState('');
+  const [date, setDate] = React.useState(new Date(null));
   const [city, setCity] = React.useState('');
   const [vaccineType, setVaccineType] = React.useState('');
   const [sideEffects, setSideEffects] = React.useState('');
   const [symptoms, setSymptoms] = React.useState('');
   const [gender, setGender] = React.useState('');
+
+  const showMode = () => {
+    DateTimePickerAndroid.open({
+      value: date,
+      onChange,
+      mode: 'date',
+      is24Hour: true,
+    });
+  };
+
+  const onChange = (event, selectedDate) => {
+    setDate(selectedDate);
+  };
+
+  const showDatepicker = () => {
+    showMode();
+  };
 
   return (
     <SafeAreaView>
@@ -34,19 +53,52 @@ const App: () => Node = () => {
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <View>
           <Headline style={{marginLeft: 5}}>COVID-19 Survey Page</Headline>
-          <TextInput
-            accessibilityLabel="name"
-            label="Name"
-            value={name}
-            onChangeText={text => setName(text)}
-          />
-          <TextInput
-            accessibilityLabel="surname"
-            label="Surname"
-            value={surname}
-            onChangeText={text => setSurname(text)}
-            style={{marginTop: 10}}
-          />
+          <View style={{flexDirection: 'row'}}>
+            <View
+              style={{
+                flex: 1,
+                marginRight: 5,
+              }}>
+              <TextInput
+                accessibilityLabel="name"
+                label="Name"
+                value={name}
+                onChangeText={text => setName(text)}
+              />
+            </View>
+            <View
+              style={{
+                flex: 1,
+                marginLeft: 5,
+              }}>
+              <TextInput
+                accessibilityLabel="surname"
+                label="Surname"
+                value={surname}
+                onChangeText={text => setSurname(text)}
+              />
+            </View>
+          </View>
+
+          <View style={{flexDirection: 'row', marginTop: 10}}>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text>Selected Birth Date: {date.toLocaleDateString()}</Text>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'flex-end',
+              }}>
+              <Button mode="contained" onPress={showDatepicker}>
+                Select Birth date
+              </Button>
+            </View>
+          </View>
           <TextInput
             accessibilityLabel="city"
             label="City"
