@@ -111,7 +111,10 @@ const App: () => Node = () => {
                 flex: 1,
                 alignItems: 'flex-end',
               }}>
-              <Button mode="contained" onPress={showDatepicker}>
+              <Button
+                mode="contained"
+                onPress={showDatepicker}
+                accessibilityLabel="birthDateButton">
                 Select Birth date
               </Button>
             </View>
@@ -128,8 +131,16 @@ const App: () => Node = () => {
             onValueChange={newValue => setGender(newValue)}
             value={gender}>
             <Text style={{marginLeft: 5, marginTop: 10}}>Gender</Text>
-            <RadioButton.Item label="Male" value="male" />
-            <RadioButton.Item label="Female" value="female" />
+            <RadioButton.Item
+              accessibilityLabel="male"
+              label="Male"
+              value="male"
+            />
+            <RadioButton.Item
+              accessibilityLabel="female"
+              label="Female"
+              value="female"
+            />
           </RadioButton.Group>
           <Divider style={{color: 'red'}} />
           <RadioButton.Group
@@ -139,14 +150,17 @@ const App: () => Node = () => {
             <RadioButton.Item
               label="mRNA (Pfizer Biontech, Moderna)"
               value="mrna"
+              accessibilityLabel="mrna"
             />
             <RadioButton.Item
               label="Inactive (Sinovac, Turkovac)"
               value="inactive"
+              accessibilityLabel="inactive"
             />
             <RadioButton.Item
               label="Viral Vector (Astrazeneca)"
               value="viralVector"
+              accessibilityLabel="viralVector"
             />
           </RadioButton.Group>
           <TextInput
@@ -165,6 +179,7 @@ const App: () => Node = () => {
           />
           {isFormFilled ? (
             <Button
+              accessibilityLabel="submitButton"
               mode="contained"
               onPress={onToggleSnackBar}
               style={{marginTop: 20, marginBottom: 20}}>
@@ -172,6 +187,7 @@ const App: () => Node = () => {
             </Button>
           ) : null}
           <Snackbar
+            accessibilityLabel="snackbar"
             visible={visible}
             onDismiss={onDismissSnackBar}
             action={{
