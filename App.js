@@ -13,8 +13,8 @@ import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
 import {
   Button,
   Divider,
-  Headline,
   RadioButton,
+  Snackbar,
   Text,
   TextInput,
 } from 'react-native-paper';
@@ -29,6 +29,7 @@ const App: () => Node = () => {
   const [sideEffects, setSideEffects] = React.useState('');
   const [symptoms, setSymptoms] = React.useState('');
   const [gender, setGender] = React.useState('');
+  const [visible, setVisible] = React.useState(false);
 
   const showMode = () => {
     DateTimePickerAndroid.open({
@@ -47,13 +48,27 @@ const App: () => Node = () => {
     showMode();
   };
 
+  const onToggleSnackBar = () => setVisible(!visible);
+
+  const onDismissSnackBar = () => setVisible(false);
+
+  const isFormFilled =
+    name !== '' &&
+    surname !== '' &&
+    date !== null &&
+    city !== '' &&
+    vaccineType !== '' &&
+    sideEffects !== '' &&
+    symptoms !== '' &&
+    gender !== '';
+
   return (
     <SafeAreaView>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <View>
-          <Headline style={{marginLeft: 5}}>COVID-19 Survey Page</Headline>
-          <View style={{flexDirection: 'row'}}>
+          {/*<Headline style={{marginLeft: 5}}>COVID-19 Survey Page</Headline>*/}
+          <View style={{flexDirection: 'row', marginTop: 10}}>
             <View
               style={{
                 flex: 1,
@@ -87,7 +102,9 @@ const App: () => Node = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <Text>Selected Birth Date: {date.toLocaleDateString()}</Text>
+              <Text>
+                Selected Birth Date: {date ? date.toLocaleDateString() : ''}
+              </Text>
             </View>
             <View
               style={{
@@ -146,12 +163,25 @@ const App: () => Node = () => {
             value={symptoms}
             onChangeText={text => setSymptoms(text)}
           />
-          <Button
-            mode="contained"
-            onPress={() => console.log('Pressed')}
-            style={{marginTop: 10}}>
-            Submit
-          </Button>
+          {isFormFilled ? (
+            <Button
+              mode="contained"
+              onPress={onToggleSnackBar}
+              style={{marginTop: 20, marginBottom: 20}}>
+              Submit
+            </Button>
+          ) : null}
+          <Snackbar
+            visible={visible}
+            onDismiss={onDismissSnackBar}
+            action={{
+              label: 'Hide',
+              onPress: () => {
+                onDismissSnackBar();
+              },
+            }}>
+            Form successfully submitted.
+          </Snackbar>
         </View>
       </ScrollView>
     </SafeAreaView>
