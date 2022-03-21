@@ -25,6 +25,26 @@ afterAll(async () => {
     await driver.deleteSession();
   }
 });
+beforeEach(async () => {
+  const nameInput = await driver.$('~name');
+  nameInput.setValue('');
+
+  const surnameInput = await driver.$('~surname');
+  await surnameInput.setValue('');
+
+  const dateInput = await driver.$('~birthDate');
+  await dateInput.setValue('');
+
+  const cityInput = await driver.$('~city');
+  await cityInput.setValue('');
+
+  const sideEffectsInput = await driver.$('~sideEffects');
+  await sideEffectsInput.setValue('');
+
+  const symptomsInput = await driver.$('~symptoms');
+  await symptomsInput.setValue('');
+});
+
 test('Successful inputs test', async () => {
   await driver.pause(2000);
 
@@ -34,62 +54,8 @@ test('Successful inputs test', async () => {
   const surnameInput = await driver.$('~surname');
   await surnameInput.setValue('Goodman');
 
-  const datepickerButton = await driver.$('~birthDateButton');
-  await datepickerButton.click();
-  await driver.pause(1000);
-
-  const windowSize = await driver.getWindowSize();
-
-  const right2leftSwipeOptions = {
-    startX: windowSize.width * 0.8,
-    startY: windowSize.height / 1.7,
-    endX: windowSize.width * 0.1,
-    endY: windowSize.height / 1.7,
-    okX: windowSize.width / 1.3,
-    okY: windowSize.height / 1.1,
-  };
-
-  await driver.touchPerform([
-    {
-      action: 'press',
-      options: {
-        x: right2leftSwipeOptions.startX,
-        y: right2leftSwipeOptions.startY,
-      },
-    },
-    {action: 'wait', options: {mseconds: 0}},
-    {
-      action: 'moveTo',
-      options: {
-        x: right2leftSwipeOptions.endX,
-        y: right2leftSwipeOptions.endY,
-      },
-    },
-    {
-      action: 'release',
-    },
-    {action: 'wait', options: {mseconds: 0}},
-    {
-      action: 'press',
-      options: {
-        x: right2leftSwipeOptions.startX,
-        y: right2leftSwipeOptions.startY,
-      },
-    },
-    {
-      action: 'release',
-    },
-    {
-      action: 'press',
-      options: {
-        x: right2leftSwipeOptions.okX,
-        y: right2leftSwipeOptions.okY,
-      },
-    },
-    {
-      action: 'release',
-    },
-  ]);
+  const dateInput = await driver.$('~birthDate');
+  await dateInput.setValue('12/11/1960');
 
   const cityInput = await driver.$('~city');
   await cityInput.setValue('Albuquerque');
@@ -109,4 +75,76 @@ test('Successful inputs test', async () => {
   const submitButton = await driver.$('~submitButton');
   expect(await submitButton.isExisting()).toEqual(true);
   await submitButton.click();
+
+  await driver.pause(1000);
+  const snackbar = await driver.$(
+    '//android.view.ViewGroup[@content-desc="snackbar"]/android.widget.TextView',
+  );
+  expect(await snackbar.getText()).toEqual('Form successfully submitted.');
+});
+
+test('Empty fields test', async () => {
+  await driver.pause(2000);
+
+  const nameInput = await driver.$('~name');
+  await nameInput.setValue('Saul');
+
+  const surnameInput = await driver.$('~surname');
+  await surnameInput.setValue('Goodman');
+
+  const dateInput = await driver.$('~birthDate');
+  await dateInput.setValue('12/11/1960');
+
+  const cityInput = await driver.$('~city');
+  await cityInput.setValue('Albuquerque');
+
+  const maleInput = await driver.$('~male');
+  await maleInput.click();
+
+  const mrnaInput = await driver.$('~mrna');
+  await mrnaInput.click();
+
+  const symptomsInput = await driver.$('~symptoms');
+  await symptomsInput.setValue('Headache, Fatigue');
+
+  const submitButton = await driver.$('~submitButton');
+  expect(await submitButton.isExisting()).toEqual(false);
+});
+
+test('Invalid date test', async () => {
+  await driver.pause(2000);
+
+  const nameInput = await driver.$('~name');
+  await nameInput.setValue('Saul');
+
+  const surnameInput = await driver.$('~surname');
+  await surnameInput.setValue('Goodman');
+
+  const dateInput = await driver.$('~birthDate');
+  await dateInput.setValue('12/11/2024');
+
+  const cityInput = await driver.$('~city');
+  await cityInput.setValue('Albuquerque');
+
+  const maleInput = await driver.$('~male');
+  await maleInput.click();
+
+  const mrnaInput = await driver.$('~mrna');
+  await mrnaInput.click();
+
+  const sideEffectsInput = await driver.$('~sideEffects');
+  await sideEffectsInput.setValue('No');
+
+  const symptomsInput = await driver.$('~symptoms');
+  await symptomsInput.setValue('Headache, Fatigue');
+
+  const submitButton = await driver.$('~submitButton');
+  expect(await submitButton.isExisting()).toEqual(true);
+  await submitButton.click();
+
+  await driver.pause(1000);
+  const snackbar = await driver.$(
+    '//android.view.ViewGroup[@content-desc="snackbar"]/android.widget.TextView',
+  );
+  expect(await snackbar.getText()).toEqual('Enter a valid birth date!');
 });

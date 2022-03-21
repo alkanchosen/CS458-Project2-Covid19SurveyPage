@@ -8,7 +8,6 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
 
 import {
   Button,
@@ -23,44 +22,44 @@ const App: () => Node = () => {
   const isDarkMode = useColorScheme() === 'dark';
   const [name, setName] = React.useState('');
   const [surname, setSurname] = React.useState('');
-  const [date, setDate] = React.useState(new Date(null));
+  const [date, setDate] = React.useState('');
   const [city, setCity] = React.useState('');
   const [vaccineType, setVaccineType] = React.useState('');
   const [sideEffects, setSideEffects] = React.useState('');
   const [symptoms, setSymptoms] = React.useState('');
   const [gender, setGender] = React.useState('');
   const [visible, setVisible] = React.useState(false);
+  const [snackbarText, setSnackbarText] = React.useState('');
 
-  const showMode = () => {
-    DateTimePickerAndroid.open({
-      value: date,
-      onChange,
-      mode: 'date',
-      is24Hour: true,
-    });
+  const onSubmit = () => {
+    const parts = date.split('/');
+    const birthDate = new Date(parts[2], parts[1] - 1, parts[0]);
+    const todaysDate = new Date();
+
+    if (birthDate <= todaysDate) {
+      setSnackbarText('Form successfully submitted.');
+    } else {
+      setSnackbarText('Enter a valid birth date!');
+    }
+
+    setVisible(!visible);
   };
-
-  const onChange = (event, selectedDate) => {
-    setDate(selectedDate);
-  };
-
-  const showDatepicker = () => {
-    showMode();
-  };
-
-  const onToggleSnackBar = () => setVisible(!visible);
 
   const onDismissSnackBar = () => setVisible(false);
 
-  const isFormFilled =
-    name !== '' &&
-    surname !== '' &&
-    date !== null &&
-    city !== '' &&
-    vaccineType !== '' &&
-    sideEffects !== '' &&
-    symptoms !== '' &&
-    gender !== '';
+  const isFormFilled = () => {
+    const dateRegex = /^(0?[1-9]|[12][0-9]|3[01])[/](0?[1-9]|1[012])[/-]\d{4}$/;
+    return (
+      name !== '' &&
+      surname !== '' &&
+      dateRegex.test(date) &&
+      city !== '' &&
+      vaccineType !== '' &&
+      sideEffects !== '' &&
+      symptoms !== '' &&
+      gender !== ''
+    );
+  };
 
   return (
     <SafeAreaView>
@@ -94,40 +93,22 @@ const App: () => Node = () => {
               />
             </View>
           </View>
-
-          <View style={{flexDirection: 'row', marginTop: 10}}>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Text>
-                Selected Birth Date: {date ? date.toLocaleDateString() : ''}
-              </Text>
-            </View>
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'flex-end',
-              }}>
-              <Button
-                mode="contained"
-                onPress={showDatepicker}
-                accessibilityLabel="birthDateButton">
-                Select Birth date
-              </Button>
-            </View>
-          </View>
+          <TextInput
+            accessibilityLabel="birthDate"
+            label="Birth Date (DD/MM/YYYY)"
+            value={date}
+            onChangeText={text => setDate(text)}
+            style={{marginTop: 5}}
+          />
           <TextInput
             accessibilityLabel="city"
             label="City"
             value={city}
             onChangeText={text => setCity(text)}
-            style={{marginTop: 10}}
+            style={{marginTop: 5}}
           />
           <RadioButton.Group
-            style={{marginTop: 10}}
+            style={{marginTop: 5}}
             onValueChange={newValue => setGender(newValue)}
             value={gender}>
             <Text style={{marginLeft: 5, marginTop: 10}}>Gender</Text>
@@ -165,38 +146,40 @@ const App: () => Node = () => {
           </RadioButton.Group>
           <TextInput
             accessibilityLabel="sideEffects"
-            style={{marginTop: 10}}
+            style={{marginTop: 5}}
             label="Side Effects"
             value={sideEffects}
             onChangeText={text => setSideEffects(text)}
           />
           <TextInput
             accessibilityLabel="symptoms"
-            style={{marginTop: 10}}
+            style={{marginTop: 5}}
             label="Any PCR positive cases and Covid-19 symptoms after 3rd vaccination"
             value={symptoms}
             onChangeText={text => setSymptoms(text)}
           />
-          {isFormFilled ? (
+          {isFormFilled() ? (
             <Button
               accessibilityLabel="submitButton"
               mode="contained"
-              onPress={onToggleSnackBar}
-              style={{marginTop: 20, marginBottom: 20}}>
+              onPress={onSubmit}
+              style={{marginTop: 10, marginBottom: 10}}>
               Submit
             </Button>
           ) : null}
           <Snackbar
+            id="snackbar"
             accessibilityLabel="snackbar"
             visible={visible}
             onDismiss={onDismissSnackBar}
+            duration={3000}
             action={{
               label: 'Hide',
               onPress: () => {
                 onDismissSnackBar();
               },
             }}>
-            Form successfully submitted.
+            {snackbarText}
           </Snackbar>
         </View>
       </ScrollView>
