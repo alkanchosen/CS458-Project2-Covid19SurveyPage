@@ -10,9 +10,26 @@ npx react-native run-android (Ensure that an emulator is installed and properly 
   - Pixel 4
   - Android 11
 
+* Before running this command make sure that Appium Desktop App is installed and running, it can be installed from this link:
+
+  - https://github.com/appium/appium-desktop/releases/tag/v1.22.2
+
 * Run this command to run the tests:
 ```
 jest appium
 ```
 
+* there can be some varitaions for this command like:
+```
+yarn jest appium
+```
+
 * https://reactnative.dev/docs/environment-setup --> React Native CLI Quickstart
+
+* Handy command if a gradle caused error occurs:
+
+```
+cd android;
+chmod +x gradlew;
+./gradlew clean && cd ..;
+```

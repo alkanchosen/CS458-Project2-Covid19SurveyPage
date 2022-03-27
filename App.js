@@ -43,6 +43,19 @@ const App: () => Node = () => {
     }
 
     setVisible(!visible);
+
+    clearFields();
+  };
+
+  const clearFields = () => {
+    setName('');
+    setSurname('');
+    setDate('');
+    setCity('');
+    setSideEffects('');
+    setSymptoms('');
+    setVaccineType('');
+    setGender('');
   };
 
   const onDismissSnackBar = () => setVisible(false);
@@ -110,7 +123,8 @@ const App: () => Node = () => {
           <RadioButton.Group
             style={{marginTop: 5}}
             onValueChange={newValue => setGender(newValue)}
-            value={gender}>
+            value={gender}
+            accessibilityLabel="gender">
             <Text style={{marginLeft: 5, marginTop: 10}}>Gender</Text>
             <RadioButton.Item
               accessibilityLabel="male"
@@ -125,6 +139,7 @@ const App: () => Node = () => {
           </RadioButton.Group>
           <Divider style={{color: 'red'}} />
           <RadioButton.Group
+            accessibilityLabel="vaccineType"
             onValueChange={newValue => setVaccineType(newValue)}
             value={vaccineType}>
             <Text style={{marginLeft: 5, marginTop: 10}}>Vaccine Type</Text>
