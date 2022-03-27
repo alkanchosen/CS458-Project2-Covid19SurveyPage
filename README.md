@@ -10,7 +10,7 @@ npx react-native run-android (Ensure that an emulator is installed and properly 
   - Pixel 4
   - Android 11
 
-* Before running this command make sure that Appium Desktop App is installed and running, it can be installed from this link:
+* Before running the command below make sure that Appium Desktop App is installed and running, it can be installed from this link:
 
   - https://github.com/appium/appium-desktop/releases/tag/v1.22.2
 
