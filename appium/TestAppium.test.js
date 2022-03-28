@@ -26,26 +26,11 @@ afterAll(async () => {
   }
 });
 beforeEach(async () => {
-  const nameInput = await driver.$('~name');
-  nameInput.setValue('');
-
-  const surnameInput = await driver.$('~surname');
-  await surnameInput.setValue('');
-
-  const dateInput = await driver.$('~birthDate');
-  await dateInput.setValue('');
-
-  const cityInput = await driver.$('~city');
-  await cityInput.setValue('');
-
-  const sideEffectsInput = await driver.$('~sideEffects');
-  await sideEffectsInput.setValue('');
-
-  const symptomsInput = await driver.$('~symptoms');
-  await symptomsInput.setValue('');
+  const clearButton = await driver.$('~clearButton');
+  await clearButton.click();
 });
 
-test('Successful inputs test', async () => {
+test('A success message should be shown after correct inputs', async () => {
   await driver.pause(2000);
 
   const nameInput = await driver.$('~name');
@@ -73,7 +58,6 @@ test('Successful inputs test', async () => {
   await symptomsInput.setValue('Headache, Fatigue');
 
   const submitButton = await driver.$('~submitButton');
-  expect(await submitButton.isExisting()).toEqual(true);
   await submitButton.click();
 
   await driver.pause(1000);
@@ -83,7 +67,7 @@ test('Successful inputs test', async () => {
   expect(await snackbar.getText()).toEqual('Form successfully submitted.');
 });
 
-test('Unchecked Radio Button Test ', async () => {
+test('Submit button should not appear if one of the radio buttons is not selected', async () => {
   await driver.pause(2000);
 
   const nameInput = await driver.$('~name');
@@ -111,7 +95,7 @@ test('Unchecked Radio Button Test ', async () => {
   expect(await submitButton.isExisting()).toEqual(false);
 });
 
-test('Empty fields test', async () => {
+test('Fields should be empty after successful submission', async () => {
   await driver.pause(2000);
 
   const nameInput = await driver.$('~name');
@@ -132,14 +116,27 @@ test('Empty fields test', async () => {
   const mrnaInput = await driver.$('~mrna');
   await mrnaInput.click();
 
+  const sideEffectsInput = await driver.$('~sideEffects');
+  await sideEffectsInput.setValue('No');
+
   const symptomsInput = await driver.$('~symptoms');
   await symptomsInput.setValue('Headache, Fatigue');
 
   const submitButton = await driver.$('~submitButton');
-  expect(await submitButton.isExisting()).toEqual(false);
+  await submitButton.click();
+
+  await driver.pause(1000);
+  expect(await nameInput.getText()).toEqual('');
+  expect(await surnameInput.getText()).toEqual('');
+  expect(await dateInput.getText()).toEqual('');
+  expect(await cityInput.getText()).toEqual('');
+  expect(await mrnaInput.getText()).toEqual('');
+  expect(await maleInput.getText()).toEqual('');
+  expect(await sideEffectsInput.getText()).toEqual('');
+  expect(await symptomsInput.getText()).toEqual('');
 });
 
-test('Invalid date test', async () => {
+test('An error message should be shown after invalid date input', async () => {
   await driver.pause(2000);
 
   const nameInput = await driver.$('~name');
@@ -167,7 +164,6 @@ test('Invalid date test', async () => {
   await symptomsInput.setValue('Headache, Fatigue');
 
   const submitButton = await driver.$('~submitButton');
-  expect(await submitButton.isExisting()).toEqual(true);
   await submitButton.click();
 
   await driver.pause(1000);
@@ -177,7 +173,7 @@ test('Invalid date test', async () => {
   expect(await snackbar.getText()).toEqual('Enter a valid birth date!');
 });
 
-test('Fill all fields and empty one field to check submit button ', async () => {
+test('Submit button should not appear when the user fills all the fields and clears one of them', async () => {
   await driver.pause(2000);
 
   const nameInput = await driver.$('~name');
@@ -203,8 +199,9 @@ test('Fill all fields and empty one field to check submit button ', async () => 
 
   const symptomsInput = await driver.$('~symptoms');
   await symptomsInput.setValue('Headache, Fatigue');
-  await symptomsInput.setValue('');
 
   const submitButton = await driver.$('~submitButton');
+  await symptomsInput.setValue('');
+
   expect(await submitButton.isExisting()).toEqual(false);
 });

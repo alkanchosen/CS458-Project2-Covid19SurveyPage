@@ -169,19 +169,42 @@ const App: () => Node = () => {
           <TextInput
             accessibilityLabel="symptoms"
             style={{marginTop: 5}}
-            label="Any PCR positive cases and Covid-19 symptoms after 3rd vaccination"
+            label="Any Covid-19 symptoms after 3rd vaccination"
             value={symptoms}
             onChangeText={text => setSymptoms(text)}
           />
-          {isFormFilled() ? (
-            <Button
-              accessibilityLabel="submitButton"
-              mode="contained"
-              onPress={onSubmit}
-              style={{marginTop: 10, marginBottom: 10}}>
-              Submit
-            </Button>
-          ) : null}
+          <View style={{flexDirection: 'row', marginTop: 5}}>
+            <View
+              style={{
+                flex: 1,
+                marginRight: 5,
+              }}>
+              <Button
+                accessibilityLabel="clearButton"
+                icon="trash-can"
+                mode="contained"
+                onPress={clearFields}
+                style={{marginTop: 10}}>
+                Clear Fields
+              </Button>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                marginLeft: 5,
+              }}>
+              {isFormFilled() ? (
+                <Button
+                  accessibilityLabel="submitButton"
+                  icon="send"
+                  mode="contained"
+                  onPress={onSubmit}
+                  style={{marginTop: 10}}>
+                  Submit
+                </Button>
+              ) : null}
+            </View>
+          </View>
           <Snackbar
             id="snackbar"
             accessibilityLabel="snackbar"
