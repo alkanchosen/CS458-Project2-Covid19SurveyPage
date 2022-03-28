@@ -12,7 +12,7 @@ npx react-native run-android (Ensure that an emulator is installed and properly 
 
 * Before running the command below make sure that Appium Desktop App is installed and running, it can be installed from this link:
 
-  - https://github.com/appium/appium-desktop/releases/tag/v1.22.2
+  - https://github.com/appium/appium-desktop/releases
 
 * Run this command to run the tests:
 ```
