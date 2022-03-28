@@ -177,7 +177,7 @@ test('Invalid date test', async () => {
   expect(await snackbar.getText()).toEqual('Enter a valid birth date!');
 });
 
-test('Non existing city test Test ', async () => {
+test('Fill all fields and empty one field to check submit button ', async () => {
   await driver.pause(2000);
 
   const nameInput = await driver.$('~name');
@@ -190,7 +190,7 @@ test('Non existing city test Test ', async () => {
   await dateInput.setValue('12/11/1960');
 
   const cityInput = await driver.$('~city');
-  await cityInput.setValue('Albuquerqueque');
+  await cityInput.setValue('Albuquerque');
 
   const maleInput = await driver.$('~male');
   await maleInput.click();
@@ -203,15 +203,8 @@ test('Non existing city test Test ', async () => {
 
   const symptomsInput = await driver.$('~symptoms');
   await symptomsInput.setValue('Headache, Fatigue');
+  await symptomsInput.setValue('');
 
   const submitButton = await driver.$('~submitButton');
-  expect(await submitButton.isExisting()).toEqual(true);
-  await submitButton.click();
-
-  await driver.pause(1000);
-  const snackbar = await driver.$(
-    '//android.view.ViewGroup[@content-desc="snackbar"]/android.widget.TextView',
-  );
-  expect(await snackbar.getText()).toEqual('Form successfully submitted.');
+  expect(await submitButton.isExisting()).toEqual(false);
 });
-
