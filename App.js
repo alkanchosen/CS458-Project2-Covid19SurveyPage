@@ -38,13 +38,12 @@ const App: () => Node = () => {
 
     if (birthDate <= todaysDate) {
       setSnackbarText('Form successfully submitted.');
+      clearFields();
     } else {
       setSnackbarText('Enter a valid birth date!');
     }
 
     setVisible(!visible);
-
-    clearFields();
   };
 
   const clearFields = () => {
